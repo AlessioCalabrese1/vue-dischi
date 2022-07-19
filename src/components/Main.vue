@@ -1,14 +1,21 @@
 <template>
-  <div>
-    <MusicCard v-for="(music, index) in musics" :key="index"
-      :music=music
-    />
-  </div>
+  <main>
+    <div class="musics-card-container container">
+      <div class="row">
+        <MusicCard v-for="(music, index) in musics" :key="index"
+        :musicElement="music"
+        />
+      </div>
+        
+    </div>
+    
+  </main>
 </template>
 
 <script>
 import axios from 'axios';
 import MusicCard from "./MusicCard.vue";
+
 export default {
     
     data: function(){
@@ -39,6 +46,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+  main{
+    background-color: #1e2d3b;
+    height: 95vh;
+    padding-top: 70px;
+  }
 
+  .musics-card-container{
+    width: 70%;
+    margin: 0 auto;
+  }
 </style>
