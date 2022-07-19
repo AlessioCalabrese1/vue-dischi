@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="musics-card-container container">
-      <div class="row">
+      <div class="row g-2">
         <MusicCard v-for="(music, index) in musics" :key="index"
         :musicElement="music"
         />
@@ -54,7 +54,7 @@ export default {
   }
 
   .musics-card-container{
-    width: 70%;
+    width: 60%;
     margin: 0 auto;
   }
 </style>

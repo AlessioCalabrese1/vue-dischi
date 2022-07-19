@@ -1,5 +1,5 @@
 <template>
-  <div class="music-card-element p-3 g-3">
+  <div class="music-card-element p-3">
     <div>
         <img class="img-fluid" :src="musicElement.poster" alt="Poster">
     </div>
@@ -30,9 +30,9 @@ export default {
 
 <style lang="scss" scoped>
     .music-card-element{
-        width: calc((100% / 5) - 1.25rem);
+        width: calc((100% / 5) - 2.5rem);
         background-color: #2e3a46;
-        margin: 10px;
+        margin: 10px 20px;
     }
     .music-element-info{
         color: white;

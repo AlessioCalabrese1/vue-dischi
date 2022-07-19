@@ -1,6 +1,6 @@
 <template>
   <header>
-    <!-- <i class="fa-brands fa-spotify"></i> -->
+    <img :src="require('../assets/logo.svg')" alt="LogoSpotify">
   </header>
 </template>
 
@@ -14,5 +14,10 @@ export default {
     header{
         height: 5vh;
         background-color: #2e3a46;
+    }
+
+    img{
+        height: calc(100% - 20px);
+        margin: 10px;
     }
 </style>
