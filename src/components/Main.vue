@@ -1,12 +1,12 @@
 <template>
-  <main>
+  <main @search="genreSearchResponse">
     <div class="musics-card-container container">
       <div class="row g-2">
-        <MusicCard v-for="(music, index) in musics" :key="index" v-show="isLoading"
+        <MusicCard v-for="(music, index) in filteredMusics" :key="index" v-show="isLoading"
         :musicElement="music"
         />
         
-        <GenreSearch :allMusics="musics" />
+        <GenreSearch :genres="genres" />
       </div>
 
       <div class="row g-2">
@@ -16,7 +16,6 @@
       </div>
         
     </div>
-    
   </main>
 </template>
 
@@ -30,7 +29,9 @@ export default {
     data: function(){
       return{
         musics: [],
+        filteredMusics: [],
         isLoading: false,
+        genres: [],
       }
     },
 
@@ -39,13 +40,28 @@ export default {
             axios.get("https://flynn.boolean.careers/exercises/api/array/music")
             .then((result) => {
               this.musics = result.data.response;
+              this.filteredMusics = this.musics;
               this.sentinell = true;
               this.isLoading = true;
+              for (let index = 0; index < this.musics.length; index++) {
+                if (this.genres.includes(this.musics[index].genre) == false) {
+                    this.genres.push(this.musics[index].genre);
+                }
+              }
             })
             .catch((error) => {
               console.log("Errore nella ricerca");
               console.log(error);
             })
+        },
+
+        genreSearchResponse(genreSelected){
+          console.log("arrivato");
+          if (genreSelected == "" || genreSelected == null) {
+            this.filteredMusics = this.musics;
+          } else{
+            this.filteredMusics = this.musics.filter( (music) => music.genre.includes(genreSelected));
+          }
         }
     },
     created() {
