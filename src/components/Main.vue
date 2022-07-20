@@ -2,9 +2,17 @@
   <main>
     <div class="musics-card-container container">
       <div class="row g-2">
-        <MusicCard v-for="(music, index) in musics" :key="index"
+        <MusicCard v-for="(music, index) in musics" :key="index" v-show="isLoading"
         :musicElement="music"
         />
+        
+        <GenreSearch :allMusics="musics" />
+      </div>
+
+      <div class="row g-2">
+        <div class="text-center loader" v-show="isLoading != true">
+          <img src="https://www.europeanpolice.it/images/loading_08obi1p7.gif" alt="Loading">
+        </div>
       </div>
         
     </div>
@@ -15,12 +23,14 @@
 <script>
 import axios from 'axios';
 import MusicCard from "./MusicCard.vue";
+import GenreSearch from './GenreSearch.vue';
 
 export default {
     
     data: function(){
       return{
         musics: [],
+        isLoading: false,
       }
     },
 
@@ -29,7 +39,8 @@ export default {
             axios.get("https://flynn.boolean.careers/exercises/api/array/music")
             .then((result) => {
               this.musics = result.data.response;
-              console.log(this.musics)
+              this.sentinell = true;
+              this.isLoading = true;
             })
             .catch((error) => {
               console.log("Errore nella ricerca");
@@ -40,9 +51,10 @@ export default {
     created() {
         this.getElemementFromApi();
     },
-    components: { 
-      MusicCard 
-    }
+    components: {
+    MusicCard,
+    GenreSearch
+}
 }
 </script>
 
@@ -56,5 +68,10 @@ export default {
   .musics-card-container{
     width: 60%;
     margin: 0 auto;
+  }
+
+  .loader{
+    color: white;
+    font-size: 25px;
   }
 </style>
