@@ -1,12 +1,13 @@
 <template>
-  <main @search="genreSearchResponse">
+  <main>
     <div class="musics-card-container container">
-      <div class="row g-2">
+      <div class="row g-2 justify-content-center">
+
+        <GenreSearch :genres="genres" @search="genreSearchResponse" class="search"/>
+
         <MusicCard v-for="(music, index) in filteredMusics" :key="index" v-show="isLoading"
         :musicElement="music"
         />
-        
-        <GenreSearch :genres="genres" />
       </div>
 
       <div class="row g-2">
@@ -56,14 +57,26 @@ export default {
         },
 
         genreSearchResponse(genreSelected){
-          console.log("arrivato");
-          if (genreSelected == "" || genreSelected == null) {
+          if (genreSelected == "" || genreSelected == "All") {
             this.filteredMusics = this.musics;
           } else{
             this.filteredMusics = this.musics.filter( (music) => music.genre.includes(genreSelected));
           }
+        },
+
+        artistSearchResponse(artistSelected){
+          if (artistSelected == "" || artistSelected == null) {
+            this.filteredMusics = this.musics;
+          } else{
+            this.filteredMusics = this.musics.filter( (music) => music.genre.includes(artistSelected));
+          }
+        },
+
+        testNew(search){
+          console.log(search);
         }
     },
+
     created() {
         this.getElemementFromApi();
     },
@@ -89,5 +102,9 @@ export default {
   .loader{
     color: white;
     font-size: 25px;
+  }
+
+  .search{
+    padding: 20px;
   }
 </style>
