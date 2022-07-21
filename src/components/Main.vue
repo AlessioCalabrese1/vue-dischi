@@ -3,8 +3,7 @@
     <div class="musics-card-container container">
       <div class="row g-2 justify-content-center">
 
-        <GenreSearch :genres="genres" @search="genreSearchResponse" class="search"/>
-
+        <SearchItems :genres="genres" :artists="artists" class="search" @principal="searchResponse" />
         <MusicCard v-for="(music, index) in filteredMusics" :key="index" v-show="isLoading"
         :musicElement="music"
         />
@@ -24,6 +23,8 @@
 import axios from 'axios';
 import MusicCard from "./MusicCard.vue";
 import GenreSearch from './GenreSearch.vue';
+import ArtistSearch from './ArtistSearch.vue';
+import SearchItems from './SearchItems.vue';
 
 export default {
     
@@ -33,6 +34,8 @@ export default {
         filteredMusics: [],
         isLoading: false,
         genres: [],
+        artists: [],
+        searchSentinell: [false, false],
       }
     },
 
@@ -48,6 +51,9 @@ export default {
                 if (this.genres.includes(this.musics[index].genre) == false) {
                     this.genres.push(this.musics[index].genre);
                 }
+                if (this.artists.includes(this.musics[index].author) == false) {
+                    this.artists.push(this.musics[index].author);
+                }
               }
             })
             .catch((error) => {
@@ -56,19 +62,37 @@ export default {
             })
         },
 
-        genreSearchResponse(genreSelected){
-          if (genreSelected == "" || genreSelected == "All") {
-            this.filteredMusics = this.musics;
-          } else{
-            this.filteredMusics = this.musics.filter( (music) => music.genre.includes(genreSelected));
+        searchResponse(criteria){
+          console.log(criteria)
+          if ((criteria[0] == "All" && criteria[1] == "All")) {
+            this.filteredMusics = this.musics
+
+          } else if((criteria[0] == "All" && criteria[1] != "All")){
+            this.filteredMusics = this.musics.filter( (music) => music.genre.includes(""));
+            this.filteredMusics = this.filteredMusics.filter( (music) =>  music.author.includes(criteria[1]));
+
+          } else if((criteria[0] != "All" && criteria[1] == "All")){
+            this.filteredMusics = this.musics.filter( (music) => music.genre.includes(criteria[0]));
+            this.filteredMusics = this.filteredMusics.filter( (music) =>  music.author.includes(""));
+            
+          } else if((criteria[0] != "All" && criteria[1] != "All")){
+            
+            this.filteredMusics = this.musics.filter( (music) => music.genre.includes(criteria[0]));
+            console.log(this.filteredMusics)
+            this.filteredMusics = this.filteredMusics.filter( (music) =>  music.author.includes(criteria[1]));
+            console.log(this.filteredMusics)
           }
         },
 
         artistSearchResponse(artistSelected){
-          if (artistSelected == "" || artistSelected == null) {
-            this.filteredMusics = this.musics;
+          if (artistSelected == "" || artistSelected == "All") {
+            this.searchSentinell[1] = true;
+            if (this.searchSentinell[0] == true && this.searchSentinell[1] == true) {
+              this.filteredMusics = this.musics;
+            }
           } else{
-            this.filteredMusics = this.musics.filter( (music) => music.genre.includes(artistSelected));
+            this.searchSentinell[1] = false;
+            this.filteredMusics = this.filteredMusics.filter( (music) => music.author.includes(artistSelected));
           }
         },
 
@@ -82,7 +106,9 @@ export default {
     },
     components: {
     MusicCard,
-    GenreSearch
+    GenreSearch,
+    ArtistSearch,
+    SearchItems
 }
 }
 </script>
